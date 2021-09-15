@@ -257,6 +257,7 @@ endif()
 
 
 add_library(vsg ${HEADERS} ${SOURCES})
+vsg_add_library_export_header(vsg INCLUDE_SUBDIR core)
 
 if(MSVC)
     # ensure the libraries are all built in the lib directory
@@ -331,9 +332,6 @@ target_link_libraries(vsg ${LIBRARIES})
 
 install(TARGETS vsg ${INSTALL_TARGETS_DEFAULT_FLAGS})
 
-if (BUILD_SHARED_LIBS)
-    target_compile_definitions(vsg INTERFACE VSG_SHARED_LIBRARY)
-endif()
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/vsg DESTINATION include)
 if (NOT(${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR}))

@@ -145,6 +145,57 @@ macro(vsg_add_feature_summary)
 endmacro()
 
 #
+# create and install export header which contains export macros for libraries
+#
+# available arguments:
+#
+#    <target>                  pattern for generating macro names (<target>_DECLSPEC)
+#                              and install pathes (include/<target>/Export.h)
+#    INCLUDE_SUBDIR <subdir>   subdirectory below 'include/<target>/' for creating
+#                              and installing the header file.
+#
+# In public c++ headers the generated file must be included with
+#
+#    #include <<target>[/<subdir>]/Export.h>
+#
+# and public classes be decorated with
+#
+#    class <target>_DECLSPEC <classname> ...
+#
+macro(vsg_add_library_export_header _TARGET)
+    set(options)
+    set(oneValueArgs INCLUDE_SUBDIR)
+    set(multiValueArgs)
+    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    string(TOUPPER ${_TARGET} TARGET_UPPER)
+
+    if(ARGS_INCLUDE_SUBDIR)
+        set(ALEP_REL_DIR ${_TARGET}/${ARGS_INCLUDE_SUBDIR})
+    else()
+        set(ALEP_REL_DIR ${_TARGET})
+    endif()
+    include(GenerateExportHeader)
+    generate_export_header(${_TARGET}
+        EXPORT_MACRO_NAME ${TARGET_UPPER}_DECLSPEC
+        EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/include/${ALEP_REL_DIR}/Export.h
+    )
+
+    # let compiler find generated file
+    target_include_directories(${_TARGET}
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+        )
+
+    install(FILES ${CMAKE_BINARY_DIR}/include/${ALEP_REL_DIR}/Export.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${ALEP_REL_DIR})
+
+    # pass the creation mode to the corresponding target in the cmake support files
+    if(NOT BUILD_SHARED_LIBS)
+        target_compile_definitions(${_TARGET} INTERFACE ${TARGET_UPPER}_STATIC_DEFINE)
+    endif()
+endmacro()
+
+#
 # add 'MAINTAINER' option
 #
 # available arguments:
