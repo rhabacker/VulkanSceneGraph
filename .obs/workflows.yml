@@ -3,4 +3,6 @@ workflow:
     - branch_package:
         source_project: home:rhabacker:branches:games
         source_package: libvsg
-
+        target_project: home:rhabacker:branches:games:github-pr
+  filters:
+    event: push
