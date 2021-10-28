@@ -6,9 +6,7 @@ workflow:
         target_project: home:rhabacker:branches:games:github-pr
   filters:
     event: push
-  repositories:
-    only:
-        - openSUSE_Tumbleweed
-        - openSUSE_15.2
-        - openSUSE_15.3
-        - SLE_15_SP3
+
+  architectures:
+      only:
+        - x86_64
