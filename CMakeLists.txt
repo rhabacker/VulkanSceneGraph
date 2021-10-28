@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
 project(vsg
-    VERSION 0.1.7
+    VERSION 0.1.9
     DESCRIPTION "VulkanSceneGraph library"
     LANGUAGES CXX
 )
@@ -32,6 +32,8 @@ if (VULKAN_SDK)
 endif()
 
 find_package(Vulkan REQUIRED)
+vsg_check_min_vulkan_header_version(162)
+
 find_package(Threads REQUIRED)
 
 if (NOT DEFINED glslang_FOUND)
