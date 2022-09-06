@@ -36,9 +36,9 @@ find_package(Vulkan ${Vulkan_MIN_VERSION} REQUIRED)
 
 find_package(Threads REQUIRED)
 
-if (NOT DEFINED glslang_FOUND)
-    find_package(vsg_glslang CONFIG PATHS ${CMAKE_SOURCE_DIR}/src/vsg)
-endif()
+find_package(glslang)
+find_package(SPIRV-Tools)
+find_package(SPIRV-Tools-opt)
 
 if (NOT glslang_FOUND)
     message("--   Support for compiling GLSL to SPIR-V and associated shader composition is not available.")

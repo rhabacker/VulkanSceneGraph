@@ -303,11 +303,6 @@ if (glslang_FOUND)
     if (GLSLANG_ResourceLimits_maxDualSourceDrawBuffersEXT)
         set(EXTRA_DEFINES ${EXTRA_DEFINES} "GLSLANG_ResourceLimits_maxDualSourceDrawBuffersEXT")
     endif()
-
-    install(
-        FILES vsg_glslangConfig.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/vsg_glslang
-    )
 endif()
 
 
@@ -428,7 +423,7 @@ if (NOT(${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR}))
 endif()
 
 if (glslang_FOUND)
-    set(FIND_DEPENDENCY_GLSLANG "find_dependency(vsg_glslang)")
+    set(FIND_DEPENDENCY_GLSLANG "find_dependency(glslang)")
 endif()
 
 vsg_add_cmake_support_files(
