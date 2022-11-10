@@ -73,7 +73,7 @@ vsg_add_target_docs(
 )
 
 # only provide custom targets if not building as a submodule/FetchContent
-if (${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+if (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
 
     # automatically buil_all_h build target to generate the include/vsg/all.h from the headers in the include/vsg/* directories
     add_custom_target(build_all_h
