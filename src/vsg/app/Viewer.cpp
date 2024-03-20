@@ -150,6 +150,19 @@ bool Viewer::pollEvents(bool discardPreviousEvents)
     return result;
 }
 
+clock::time_point Viewer::advanceToNextTimePoint()
+{
+    return vsg::clock::now();
+}
+
+void Viewer::advanceToNextFrameHook()
+{
+    for (auto& task : recordAndSubmitTasks)
+    {
+        task->advance();
+    }
+}
+
 bool Viewer::advanceToNextFrame(double simulationTime)
 {
     static constexpr SourceLocation s_frame_source_location{"Viewer advanceToNextFrame", VsgFunctionName, __FILE__, __LINE__, COLOR_VIEWER, 1};
@@ -168,7 +181,7 @@ bool Viewer::advanceToNextFrame(double simulationTime)
     if (!acquireNextFrame()) return false;
 
     // create FrameStamp for frame
-    auto time = vsg::clock::now();
+    auto time = advanceToNextTimePoint();
     if (!_frameStamp)
     {
         _start_point = time;
@@ -192,10 +205,7 @@ bool Viewer::advanceToNextFrame(double simulationTime)
     // signal to instrumentation the start of frame
     if (instrumentation) instrumentation->enterFrame(&s_frame_source_location, frameReference, *_frameStamp);
 
-    for (auto& task : recordAndSubmitTasks)
-    {
-        task->advance();
-    }
+    advanceToNextFrameHook();
 
     // create an event for the new frame.
     _events.emplace_back(new FrameEvent(_frameStamp));

@@ -96,6 +96,14 @@ namespace vsg
         /// hint for setting the FrameStamp::simulationTime to time since start_point()
         static constexpr double UseTimeSinceStartPoint = std::numeric_limits<double>::max();
 
+        /// get next time point in Viewer::advanceToNextFrame()
+        /// The standard implemnentation advances to the actual time by using vsg::clock::now()
+        virtual clock::time_point advanceToNextTimePoint();
+
+        /// hook for Viewer::advanceToNextFrame() for advancing to next tasks, layers etc.
+        /// The default implementation advances to the next tasks
+        virtual void advanceToNextFrameHook();
+
         /// Convenience method for advancing to the next frame.
         /// Check active status, return false if viewer no longer active.
         /// If still active, poll for pending events and place them in the Events list and advance to the next frame, generate updated FrameStamp to signify the advancement to a new frame and return true.
